@@ -1,16 +1,46 @@
-[gd_scene load_steps=2 format=3 uid="uid://deutmsqnq84h7"]
+[gd_scene load_steps=7 format=3 uid="uid://deutmsqnq84h7"]
+
+[ext_resource type="Script" path="res://wall_prototype.gd" id="1_jl2ts"]
+[ext_resource type="Script" path="res://test_dummy.gd" id="2_xp42u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g56ig"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_itmjl"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_btfo3"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_qhv13"]
+
 [node name="Node3D" type="Node3D"]
 
-[node name="WallPrototype" type="Area3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.8334)
+
+[node name="WallPrototype" type="RigidBody3D" parent="." groups=["walls"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.24572, 0, 0)
+gravity_scale = 0.0
+script = ExtResource("1_jl2ts")
+SpeedX = -20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallPrototype"]
 shape = SubResource("BoxShape3D_g56ig")
 
-[node name="TestDummy" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.30838, 0, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallPrototype"]
+mesh = SubResource("BoxMesh_itmjl")
+
+[node name="TestDummy" type="RigidBody3D" parent="."]
+mass = 0.5
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 10
+script = ExtResource("2_xp42u")
+TargetWallHit = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TestDummy"]
-shape = SubResource("BoxShape3D_g56ig")
+shape = SubResource("SphereShape3D_btfo3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestDummy"]
+mesh = SubResource("SphereMesh_qhv13")
+
+[connection signal="body_entered" from="TestDummy" to="TestDummy" method="_on_body_entered"]
+[connection signal="body_exited" from="TestDummy" to="TestDummy" method="_on_body_exited"]
