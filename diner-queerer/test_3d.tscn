@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://deutmsqnq84h7"]
+[gd_scene load_steps=10 format=3 uid="uid://deutmsqnq84h7"]
 
 [ext_resource type="Script" path="res://camera_top_down.gd" id="1_c0ae4"]
-[ext_resource type="Script" path="res://wall_prototype.gd" id="1_jl2ts"]
+[ext_resource type="PackedScene" uid="uid://yp8ref0snstb" path="res://wall_prototype.tscn" id="2_62tn8"]
 [ext_resource type="Script" path="res://test_dummy.gd" id="2_xp42u"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6bxq7"]
@@ -14,26 +14,27 @@ _data = {
 "Camera_close": SubResource("Animation_4uuu5")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_g56ig"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_itmjl"]
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_btfo3"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_qhv13"]
 
 [sub_resource type="Environment" id="Environment_umd6n"]
+background_energy_multiplier = 3.0
 ambient_light_color = Color(0.852103, 0.851038, 0.808744, 1)
 
 [node name="Node3D" type="Node3D"]
 
 [node name="CameraTopDown" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 current = true
 script = ExtResource("1_c0ae4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraTopDown"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.41245, -0.5)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -2, -0.5)
+mesh = SubResource("PlaneMesh_6bxq7")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CameraTopDown"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2, -0.5)
 mesh = SubResource("PlaneMesh_6bxq7")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CameraTopDown"]
@@ -41,17 +42,8 @@ libraries = {
 "": SubResource("AnimationLibrary_jxmyu")
 }
 
-[node name="WallPrototype" type="RigidBody3D" parent="." groups=["walls"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.24572, 0, 0)
-gravity_scale = 0.0
-script = ExtResource("1_jl2ts")
-SpeedX = -20.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WallPrototype"]
-shape = SubResource("BoxShape3D_g56ig")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WallPrototype"]
-mesh = SubResource("BoxMesh_itmjl")
+[node name="WallPrototype" parent="." instance=ExtResource("2_62tn8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 
 [node name="TestDummy" type="RigidBody3D" parent="."]
 mass = 0.5
@@ -75,3 +67,5 @@ environment = SubResource("Environment_umd6n")
 [connection signal="animation_finished" from="CameraTopDown/AnimationPlayer" to="CameraTopDown" method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="TestDummy" to="TestDummy" method="_on_body_entered"]
 [connection signal="body_exited" from="TestDummy" to="TestDummy" method="_on_body_exited"]
+
+[editable path="WallPrototype"]
