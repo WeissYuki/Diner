@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://yp8ref0snstb"]
+[gd_scene load_steps=4 format=3 uid="uid://cdjgacwk7jkee"]
 
-[ext_resource type="Script" path="res://wall_prototype.gd" id="1_mx4c0"]
+[ext_resource type="Script" path="res://wall_prototype.gd" id="1_ac7hc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g56ig"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_itmjl"]
 
-[node name="WallPrototype" type="RigidBody3D" groups=["walls"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.24572, 0, 0)
+[node name="WallSideR" type="RigidBody3D" groups=["walls"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 gravity_scale = 0.0
 lock_rotation = true
-script = ExtResource("1_mx4c0")
-SpeedX = -20.0
+script = ExtResource("1_ac7hc")
+SpeedX = -1.0
 StartSizeX = 1.0
-StartSizeY = 1.0
-scalerY = 0.001
+StartSizeY = 5.0
+scalerY = 0.002
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_g56ig")

@@ -1,7 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://deutmsqnq84h7"]
+[gd_scene load_steps=16 format=3 uid="uid://deutmsqnq84h7"]
 
 [ext_resource type="Script" path="res://camera_top_down.gd" id="1_c0ae4"]
 [ext_resource type="PackedScene" uid="uid://yp8ref0snstb" path="res://wall_prototype.tscn" id="2_62tn8"]
+[ext_resource type="Script" path="res://wall_prototype.gd" id="2_k5yyr"]
+[ext_resource type="PackedScene" uid="uid://cdjgacwk7jkee" path="res://wall_side_r.tscn" id="2_ngwjt"]
 [ext_resource type="Script" path="res://test_dummy.gd" id="2_xp42u"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6bxq7"]
@@ -13,6 +15,14 @@ resource_name = "Camera_close"
 _data = {
 "Camera_close": SubResource("Animation_4uuu5")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g56ig"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_itmjl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x0mnc"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v3elx"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_btfo3"]
 
@@ -42,16 +52,56 @@ libraries = {
 "": SubResource("AnimationLibrary_jxmyu")
 }
 
-[node name="WallPrototype" parent="." instance=ExtResource("2_62tn8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+[node name="WallSideR" parent="." instance=ExtResource("2_ngwjt")]
+
+[node name="WallSideT" parent="." instance=ExtResource("2_62tn8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0577211, 3.35278, 0)
+SpeedX = 0.0
+SpeedY = -1.0
+StartSizeX = 5.0
+scalerX = 0.002
+scalerY = 0.0
+
+[node name="WallSideB" type="RigidBody3D" parent="." groups=["walls"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0577211, -4.38998, 0)
+gravity_scale = 0.0
+lock_rotation = true
+script = ExtResource("2_k5yyr")
+SpeedY = 1.0
+StartSizeX = 5.0
+StartSizeY = 1.0
+scalerX = 0.002
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSideB"]
+shape = SubResource("BoxShape3D_g56ig")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSideB"]
+mesh = SubResource("BoxMesh_itmjl")
+
+[node name="WallSideL" type="RigidBody3D" parent="." groups=["walls"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.50645, 0, 0)
+gravity_scale = 0.0
+lock_rotation = true
+script = ExtResource("2_k5yyr")
+SpeedX = 1.0
+StartSizeX = 1.0
+StartSizeY = 5.0
+scalerY = 0.002
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSideL"]
+shape = SubResource("BoxShape3D_x0mnc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSideL"]
+mesh = SubResource("BoxMesh_v3elx")
 
 [node name="TestDummy" type="RigidBody3D" parent="."]
 mass = 0.5
 gravity_scale = 0.0
+lock_rotation = true
 contact_monitor = true
 max_contacts_reported = 10
 script = ExtResource("2_xp42u")
-TargetWallHit = 1
+TargetWallHit = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TestDummy"]
 shape = SubResource("SphereShape3D_btfo3")
@@ -67,5 +117,3 @@ environment = SubResource("Environment_umd6n")
 [connection signal="animation_finished" from="CameraTopDown/AnimationPlayer" to="CameraTopDown" method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="TestDummy" to="TestDummy" method="_on_body_entered"]
 [connection signal="body_exited" from="TestDummy" to="TestDummy" method="_on_body_exited"]
-
-[editable path="WallPrototype"]
